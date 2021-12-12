@@ -1,0 +1,9 @@
+
+
+# python virtual envirements
+env/
+venv/
+
+# python files
+__pycache__/
+*/__pycache__/
