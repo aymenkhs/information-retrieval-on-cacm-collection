@@ -18,18 +18,28 @@ def read_docs(content):
 	del parts[0]
 
 	for part in parts:
-		m = re.search(r'([0-9]*)\n\.T\n(.*)(\.W\n(.*)\n)?', part, re.S)
 
-		id_doc = m.group(1)
-		title = m.group(2)
-		abstract = m.group(4)
+		id_doc = re.search(r'^([0-9]*)\n', part).group(1)
+
+		splits = re.split(r'\.W\n', part)
+
+		if len(splits) == 1:
+			m = re.search(r'\.T\n(.*)\n\.B\n', part, re.S)
+		else:
+			m = re.search(r'\.T\n(.*)\.W\n', part, re.S)
+		try:
+			title = m.group(1)
+		except AttributeError as e:
+			import pdb; pdb.set_trace()
+
+
+		abstract = re.search(r'\.W\n(.*)\n\.B', part, re.S)
 
 		if abstract is None:
 			abstract = ''
-
-		if id_doc == '20':
-			import pdb; pdb.set_trace()
+		else:
+			abstract = abstract.group(1)
 
 		documents.append(Document(id_doc, title, abstract))
 
-	import pdb; pdb.set_trace()
+	return documents
