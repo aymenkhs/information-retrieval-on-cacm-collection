@@ -3,7 +3,8 @@ import re
 
 from src.document import Document
 
-FILE_PATH = os.path.join("cacm", "cacm.all")
+DOCUMENT_FILE_PATH = os.path.join("cacm", "cacm.all")
+STOPWORDS_FILE_PATH = os.path.join("cacm", "common_words")
 
 def read_file(file_path):
     with open(file_path) as file:
@@ -43,3 +44,9 @@ def read_docs(content):
 		documents.append(Document(id_doc, title, abstract))
 
 	return documents
+
+
+def read_stop_list(file_path=STOPWORDS_FILE_PATH):
+	content = read_file(file_path)
+	words = content.split('\n')
+	return words[:-1]
