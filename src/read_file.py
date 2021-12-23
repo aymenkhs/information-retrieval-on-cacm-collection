@@ -13,8 +13,6 @@ def read_file(file_path):
 
 def read_docs(content):
 
-	documents = []
-
 	parts = re.split(r'\.I ', content)
 	del parts[0]
 
@@ -41,9 +39,9 @@ def read_docs(content):
 		else:
 			abstract = abstract.group(1)
 
-		documents.append(Document(id_doc, title, abstract))
+		Document.DOCUMENTS.append(Document(id_doc, title, abstract))
 
-	return documents
+	return Document.DOCUMENTS
 
 
 def read_stop_list(file_path=STOPWORDS_FILE_PATH):

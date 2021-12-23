@@ -1,8 +1,8 @@
 import nltk
-from nltk.corpus import stopwords
 
 class Document:
 
+	DOCUMENTS = []
 	STOPWORDS = []
 
 	def __init__(self, id, title, abstract):
@@ -25,3 +25,12 @@ class Document:
 				self.frequency[word] = 1
 		self.words = [*self.frequency]
 		return self.frequency
+
+	@classmethod
+	def all_words(cls):
+		words = []
+		for document in cls.DOCUMENTS:
+			for word in document.words:
+				if word not in words:
+					words.append(word)
+		return words
