@@ -11,6 +11,12 @@ class Document:
 		self.title = title
 		self.abstract = abstract
 
+	def __str__(self):
+		return str(self.id)
+
+	def __repr__(self):
+		return str(self)
+
 	def tokenise(self):
 		words = nltk.word_tokenize(self.title + ' ' + self.abstract)
 		words = [word.lower() for word in words if word.isalnum()]
@@ -28,6 +34,9 @@ class Document:
 
 	def max_frequency(self):
 		return max(self.frequency.values())
+
+	def word_exist(self, word):
+		return word in self.words
 
 	@classmethod
 	def nb_documents(cls):
