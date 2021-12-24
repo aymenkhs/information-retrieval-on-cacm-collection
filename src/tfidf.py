@@ -32,3 +32,10 @@ def tf_idf(inverse_structure):
 			if word in document.words:
 				inverse_weight_matrix[word].append((document, weight(word, document)))
 	return inverse_weight_matrix
+
+def get_weight(inverse_weight_matrix, searching_document, word):
+	pair_documents = inverse_weight_matrix[word]
+	for document, weight in pair_documents:
+		 if document.id == searching_document.id:
+			 return weight
+	return None
