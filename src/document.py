@@ -26,6 +26,13 @@ class Document:
 		self.words = [*self.frequency]
 		return self.frequency
 
+	def max_frequency(self):
+		return max(self.frequency.values())
+
+	@classmethod
+	def nb_documents(cls):
+		return len(cls.DOCUMENTS)
+
 	@classmethod
 	def all_words(cls):
 		words = []
