@@ -1,4 +1,4 @@
-from src.tfidf import inverse_file, tf_idf
+from src.tfidf import indexation, inverse_file, tf_idf
 
 def main():
 	indexation()
