@@ -3,15 +3,14 @@ import math
 from nltk import word_tokenize
 
 from src.document import Document
-from src.tfidf import get_weight
 
 def internal_product(query, document, inverse_weight_matrix):
 	sum = 0
 	for word in query:
 		if word in inverse_weight_matrix:
-			weight = get_weight(inverse_weight_matrix, document, word)
-			if weight != None:
-				sum += weight
+			word_weight = inverse_weight_matrix[word]
+			if document in word_weight:
+				sum += word_weight[document]
 	return sum
 
 def dice_coeficient(query, document, inverse_weight_matrix):
@@ -22,10 +21,7 @@ def dice_coeficient(query, document, inverse_weight_matrix):
 def cosinus_measure(query, document, inverse_weight_matrix):
 	product = internal_product(query, document, inverse_weight_matrix)
 	sum_power = sum_power_2(document, inverse_weight_matrix)
-	try:
-		return product / math.sqrt(sum_power * len(query))
-	except ZeroDivisionError as e:
-		import pdb; pdb.set_trace()
+	return product / math.sqrt(sum_power * len(query))
 
 def jaccard_measure(query, document, inverse_weight_matrix):
 	product = internal_product(query, document, inverse_weight_matrix)
@@ -34,10 +30,10 @@ def jaccard_measure(query, document, inverse_weight_matrix):
 
 def sum_power_2(document, inverse_weight_matrix):
 	sum = 0
-	for word in inverse_weight_matrix:
-		weight = get_weight(inverse_weight_matrix, document, word)
-		if weight != None:
-			sum += (weight ** 2)
+	for word in document.words:
+		import pdb; pdb.set_trace()
+		weight = inverse_weight_matrix[word][document.id]
+		sum += (weight ** 2)
 	return sum
 
 def rsv(query, document, inverse_weight_matrix, measure_function=internal_product):
