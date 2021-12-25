@@ -4,8 +4,9 @@ from src.tfidf import execute_tfidf
 from src.boolean_model import boolean_model
 from src.vectorial_model import vectorial_model, LIST_MEASURES_FUNCTIONS
 from src.pkl import load_results
-from src.evaluations import launch_all_evaluations
+from src.evaluations import launch_all_evaluations, evaluate_vectorial_function
 from src.read_file import read_requests
+from src.requests import Request
 
 
 def parse_arguments():
@@ -27,7 +28,7 @@ def main():
 	if args.evaluations:
 		launch_all_evaluations(inverse_weight_matrix)
 	elif args.test:
-		pass
+		print(evaluate_vectorial_function(inverse_weight_matrix, 'cosinus measure', Request.REQUESTS[0], 0.2))
 	else:
 		pass
 		# launch the UI
