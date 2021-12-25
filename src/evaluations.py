@@ -27,7 +27,6 @@ def evaluate_vectorial_function(inverse_weight_matrix, function):
 		for treshold in tresholds:
 			selected_documents = vectorial_model(request.content,
 				inverse_weight_matrix, LIST_MEASURES_FUNCTIONS[function])
-			print(y-x)
 			if len(selected_documents) == 0:
 				break
 
