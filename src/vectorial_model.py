@@ -9,8 +9,8 @@ def internal_product(query, document, inverse_weight_matrix):
 	for word in query:
 		if word in inverse_weight_matrix:
 			word_weight = inverse_weight_matrix[word]
-			if document in word_weight:
-				sum += word_weight[document]
+			if document.id in word_weight:
+				sum += word_weight[document.id]
 	return sum
 
 def dice_coeficient(query, document, inverse_weight_matrix):
@@ -31,7 +31,6 @@ def jaccard_measure(query, document, inverse_weight_matrix):
 def sum_power_2(document, inverse_weight_matrix):
 	sum = 0
 	for word in document.words:
-		import pdb; pdb.set_trace()
 		weight = inverse_weight_matrix[word][document.id]
 		sum += (weight ** 2)
 	return sum
