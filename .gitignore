@@ -7,3 +7,6 @@ venv/
 # python files
 __pycache__/
 */__pycache__/
+
+# results
+saved_structures/*.pkl
