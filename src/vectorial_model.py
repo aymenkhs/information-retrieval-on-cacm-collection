@@ -6,42 +6,47 @@ from src.document import Document
 
 def internal_product(query, document, inverse_weight_matrix):
 	sum = 0
-	for word in query:
-		if word in inverse_weight_matrix:
-			word_weight = inverse_weight_matrix[word]
-			if document.id in word_weight:
-				sum += word_weight[document.id]
+	for word in document.words:
+		if word in query:
+			sum += inverse_weight_matrix[word][document.id]
 	return sum
 
 def dice_coeficient(query, document, inverse_weight_matrix):
-	product = internal_product(query, document, inverse_weight_matrix)
-	sum_power = sum_power_2(document, inverse_weight_matrix)
-	return (2 * product) / (sum_power + len(query))
+	product, power2, cmpt = loop_caluculation(query, document, inverse_weight_matrix)
+	if product == 0:
+		return 0
+	return (2 * product) / (power2 + cmpt)
 
 def cosinus_measure(query, document, inverse_weight_matrix):
-	product = internal_product(query, document, inverse_weight_matrix)
-	sum_power = sum_power_2(document, inverse_weight_matrix)
-	return product / math.sqrt(sum_power * len(query))
+	product, power2, cmpt = loop_caluculation(query, document, inverse_weight_matrix)
+	if product == 0:
+		return 0
+	return product / math.sqrt(power2 * cmpt)
 
 def jaccard_measure(query, document, inverse_weight_matrix):
-	product = internal_product(query, document, inverse_weight_matrix)
-	sum_power = sum_power_2(document, inverse_weight_matrix)
-	return product / (sum_power + len(query) - product)
+	product, power2, cmpt = loop_caluculation(query, document, inverse_weight_matrix)
+	if product == 0:
+		return 0
+	return product / (power2 + cmpt - product)
 
-def sum_power_2(document, inverse_weight_matrix):
-	sum = 0
+def loop_caluculation(query, document, inverse_weight_matrix):
+	product = 0
+	power2 = 0
+	cmpt = 0
 	for word in document.words:
-		weight = inverse_weight_matrix[word][document.id]
-		sum += (weight ** 2)
-	return sum
+		if word in query:
+			product += inverse_weight_matrix[word][document.id]
+			cmpt+=1
+		power2 += (inverse_weight_matrix[word][document.id] ** 2)
+	return product, power2, cmpt
 
 def rsv(query, document, inverse_weight_matrix, measure_function=internal_product):
-	query = word_tokenize(query)
-	query = [word.lower() for word in query if word not in Document.STOPWORDS]
-
 	return measure_function(query, document, inverse_weight_matrix)
 
 def vectorial_model(query, inverse_weight_matrix, measure_function=internal_product, threshold=0.1):
+	query = word_tokenize(query)
+	query = [word.lower() for word in query if word not in Document.STOPWORDS]
+	
 	relevent_documents = []
 	for document in Document.DOCUMENTS:
 		result = rsv(query, document, inverse_weight_matrix, measure_function)
