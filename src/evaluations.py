@@ -11,6 +11,12 @@ calculate_fmeasure = lambda p, r : (2 * p * r) / (p + r)
 calculate_precision = lambda docs_pert_select, docs_select : docs_pert_select / docs_select
 calculate_recall = lambda docs_pert_select, docs_pert : docs_pert_select / docs_pert
 
+MEASURES_THRESHOLDS = {
+	'internal product': (0, 35, 5, 10),
+	'dice coeficient': (0, 50, 5, 100),
+	'cosinus measure': (0, 6, 1, 10),
+	'jaccard measure': (0, 50, 5, 100),
+}
 
 class EvaluationError(Exception):
 	def __init__(self):
@@ -41,8 +47,9 @@ def evaluate_vectorial_function(inverse_weight_matrix, function, request, tresho
 			fmeasure = calculate_fmeasure(precision, recall)
 	return precision, recall, fmeasure, selected_documents
 
-def evaluate_and_store(inverse_weight_matrix, function):
-	tresholds = [x/10 for x in list(range(1,6))]
+def evaluate_and_store(inverse_weight_matrix, function, tresholds=(1, 10, 1, 10)):
+	start, end, step, div = tresholds
+	tresholds = [x/div for x in list(range(start+step, end, step))]
 
 	list_results = []
 	for request in Request.REQUESTS:
@@ -69,4 +76,4 @@ def evaluate_and_store(inverse_weight_matrix, function):
 
 def launch_all_evaluations(inverse_weight_matrix):
 	for function in LIST_MEASURES_FUNCTIONS:
-		evaluate_and_store(inverse_weight_matrix, function)
+		evaluate_and_store(inverse_weight_matrix, function, tresholds=MEASURES_THRESHOLDS[function])
