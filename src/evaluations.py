@@ -18,26 +18,28 @@ def evaluate(selected_documents, request):
 
 def evaluate_vectorial_function(inverse_weight_matrix, function):
 	read_requests()
-	tresholds = [x/10 for x in list(range(1,10))]
-	evaluations_results = pd.DataFrame(columns=['request', 'treshold', 'precision', 'recall', 'fmeasure'])
+	tresholds = [x/10 for x in list(range(1,6))]
+
+	list_results = []
 	for request in Request.REQUESTS:
 		if len(request.expected_results) == 0:
 			continue
 
 		for treshold in tresholds:
 			selected_documents = vectorial_model(request.content,
-				inverse_weight_matrix, LIST_MEASURES_FUNCTIONS[function])
+				inverse_weight_matrix, LIST_MEASURES_FUNCTIONS[function], threshold=treshold)
 			if len(selected_documents) == 0:
-				break
-
-			precision, recall = evaluate(selected_documents, request)
-			if precision == 0 and recall == 0:
-				fmeasure = 0
-			else:
-				fmeasure = calculate_fmeasure(precision, recall)
+				precision, recall, fmeasure = 0, 0, 0
+			else :
+				precision, recall = evaluate(selected_documents, request)
+				if precision == 0 and recall == 0:
+					fmeasure = 0
+				else:
+					fmeasure = calculate_fmeasure(precision, recall)
 
 			print(request.id, treshold, precision, recall, fmeasure)
 			df2 = [request.id, treshold, precision, recall, fmeasure]
-			evaluations_results.append(df2, ignore_index = True)
+			list_results.append(df2)
+	evaluations_results = pd.DataFrame(list_results, columns=['request', 'treshold', 'precision', 'recall', 'fmeasure'])
 
 	import pdb; pdb.set_trace()
