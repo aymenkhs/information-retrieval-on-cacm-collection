@@ -19,12 +19,10 @@ class Document:
 
 	def tokenise(self):
 		words = nltk.word_tokenize(self.title + ' ' + self.abstract)
-		words = [word.lower() for word in words if word.isalnum()]
+		words = [word.lower() for word in words if (word not in Document.STOPWORDS and not word.isspace() and word != "")]
 
 		self.frequency = {}
 		for word in words:
-			if word in Document.STOPWORDS or word.isspace() or word == "":
-				continue
 			if word in self.frequency:
 				self.frequency[word] += 1
 			else:
