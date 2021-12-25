@@ -2,6 +2,7 @@ from src.tfidf import indexation, inverse_file, tf_idf
 from src.boolean_model import boolean_model
 from src.vectorial_model import vectorial_model, LIST_MEASURES_FUNCTIONS
 from src.pkl import save_results, load_results
+from src.evaluations import evaluate_vectorial_function
 
 def execute_tfidf():
 	indexation()
@@ -12,8 +13,7 @@ def execute_tfidf():
 
 def main():
 	inverse_weight_matrix, inverse_structure = load_results()
-	string = 'What articles exist which deal with TSS (Time Sharing System), an \n operating system for IBM computers?'
-	print(vectorial_model(string, inverse_weight_matrix, LIST_MEASURES_FUNCTIONS['cosinus measure']))
+	evaluate_vectorial_function('cosinus measure', (0, 1, 0.1))
 
 if __name__ == '__main__':
 	main()
