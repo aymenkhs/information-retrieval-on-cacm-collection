@@ -47,4 +47,5 @@ class Document:
 			for word in document.words:
 				if word not in words:
 					words.append(word)
+		cls.WORDS = words
 		return words

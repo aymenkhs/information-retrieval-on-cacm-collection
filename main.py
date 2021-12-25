@@ -13,7 +13,7 @@ def execute_tfidf():
 
 def main():
 	inverse_weight_matrix, inverse_structure = load_results()
-	evaluate_vectorial_function('cosinus measure', (0, 1, 0.1))
+	evaluate_vectorial_function(inverse_weight_matrix, 'cosinus measure')
 
 if __name__ == '__main__':
 	main()
