@@ -1,6 +1,6 @@
 from src.tfidf import indexation, inverse_file, tf_idf
 from src.boolean_model import boolean_model
-from src.vectorial_modal import vectorial_model, LIST_MEASURES_FUNCTIONS
+from src.vectorial_model import vectorial_model, LIST_MEASURES_FUNCTIONS
 from src.pkl import save_results, load_results
 
 def execute_tfidf():
