@@ -30,3 +30,10 @@ def tf_idf(inverse_structure):
 				inverse_weight_matrix[word] = {}
 			inverse_weight_matrix[word][document.id] = weight(word, document)
 	return inverse_weight_matrix
+
+def execute_tfidf():
+	indexation()
+	inverse_structure = inverse_file()
+	inverse_weight_matrix = tf_idf(inverse_structure)
+	save_results(inverse_weight_matrix, inverse_structure)
+	return inverse_weight_matrix, inverse_structure

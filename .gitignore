@@ -10,3 +10,4 @@ __pycache__/
 
 # results
 saved_structures/*.pkl
+evaluation_results/*.csv

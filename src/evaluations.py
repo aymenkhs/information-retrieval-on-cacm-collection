@@ -1,9 +1,11 @@
-import numpy as np
+import os
+
 import pandas as pd
 
 from src.vectorial_model import vectorial_model, LIST_MEASURES_FUNCTIONS
 from src.requests import Request
-from src.read_file import read_requests
+
+RESULT_FOLDER = 'evaluation_results'
 
 calculate_fmeasure = lambda p, r : (2 * p * r) / (p + r)
 calculate_precision = lambda docs_pert_select, docs_select : docs_pert_select / docs_select
@@ -41,5 +43,35 @@ def evaluate_vectorial_function(inverse_weight_matrix, function):
 			df2 = [request.id, treshold, precision, recall, fmeasure]
 			list_results.append(df2)
 	evaluations_results = pd.DataFrame(list_results, columns=['request', 'treshold', 'precision', 'recall', 'fmeasure'])
+	evaluations_results.to_csv(os.path.join(RESULT_FOLDER, '{}.csv'.format(function)))
 
-	import pdb; pdb.set_trace()
+def evaluate_and_store(inverse_weight_matrix, function):
+
+	tresholds = [x/10 for x in list(range(1,6))]
+
+	list_results = []
+	for request in Request.REQUESTS:
+		if len(request.expected_results) == 0:
+			continue
+
+		for treshold in tresholds:
+			selected_documents = vectorial_model(request.content,
+				inverse_weight_matrix, LIST_MEASURES_FUNCTIONS[function], threshold=treshold)
+			if len(selected_documents) == 0:
+				precision, recall, fmeasure = 0, 0, 0
+			else :
+				precision, recall = evaluate(selected_documents, request)
+				if precision == 0 and recall == 0:
+					fmeasure = 0
+				else:
+					fmeasure = calculate_fmeasure(precision, recall)
+
+			print(request.id, treshold, precision, recall, fmeasure)
+			df2 = [request.id, treshold, precision, recall, fmeasure]
+			list_results.append(df2)
+	evaluations_results = pd.DataFrame(list_results, columns=['request', 'treshold', 'precision', 'recall', 'fmeasure'])
+	evaluations_results.to_csv(os.path.join(RESULT_FOLDER, '{}.csv'.format(function)))
+
+def launch_all_evaluations(inverse_weight_matrix):
+	for function in LIST_MEASURES_FUNCTIONS:
+		evaluate_and_store(inverse_weight_matrix, function)
