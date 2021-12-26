@@ -16,6 +16,6 @@ def query_processing(query, document):
 		if word.lower() in ['and', 'or', 'not', '(', ')']:
 			new_query.append(word)
 		else:
-			new_query.append(str(document.word_exist(word)))
+			new_query.append(str(document.word_exist(word.lower())))
 
 	return ' '.join(new_query)
