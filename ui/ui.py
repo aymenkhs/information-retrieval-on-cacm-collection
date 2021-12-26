@@ -29,6 +29,8 @@ class Window(QMainWindow, Ui_MainWindow):
 		super().__init__(parent)
 		self.setupUi(self)
 
+		self.setWindowTitle('Projet RI')
+
 		self.setup_values()
 		self.setup_conections()
 
