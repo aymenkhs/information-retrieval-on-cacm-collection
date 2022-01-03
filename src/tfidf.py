@@ -2,6 +2,7 @@ import math
 
 from src.read_file import *
 from src.document import Document
+from src.pkl import save_results
 
 def indexation():
 	Document.STOPWORDS = read_stop_list()
