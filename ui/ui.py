@@ -36,7 +36,11 @@ class Window(QMainWindow, Ui_MainWindow):
 
 	def setup_values(self):
 		read_requests()
-		self.inverse_weight_matrix, self.inverse_structure = execute_tfidf()
+		try:
+			self.inverse_weight_matrix, self.inverse_structure = load_results()
+		except FileNotFoundError as e:
+			self.inverse_weight_matrix, self.inverse_structure = execute_tfidf()
+
 		self.QueryText.setPlainText(Request.REQUESTS[0].content)
 
 	def setup_conections(self):
